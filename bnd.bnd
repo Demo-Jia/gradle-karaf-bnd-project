@@ -1,0 +1,5 @@
+package-version=${version;===;${Bundle-Version}}
+
+Bundle-Name: Greeting API  created at ${tstamp}
+Bundle-SymbolicName: net.sf.greetingapi
+Export-Package: net.sf.greetingapi;version=${package-version}
