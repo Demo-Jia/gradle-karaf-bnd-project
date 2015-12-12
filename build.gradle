@@ -1,21 +1,39 @@
 buildscript {
-	repositories {
-		jcenter()
-	}
-	dependencies {
-		classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.0.0'
-	}
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.0.0'
+  }
+
 }
 
-apply plugin: 'biz.aQute.bnd.builder'
-
-repositories {
-	mavenCentral()	
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'biz.aQute.bnd.builder'
+ 
+    repositories {
+        mavenCentral()
+    }
+  
+    sourceCompatibility = 1.8
+    version = '7.1'
+    
+    dependencies {
+        testCompile 'junit:junit:4.12'
+        compile 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.0.0'
+    }
+   
 }
+// See http://stackoverflow.com/questions/9547170/in-gradle-how-do-i-declare-common-dependencies-in-a-single-place
 
-sourceCompatibility = 1.8
-version = '7.0'
+ext.libraries = [ // Groovy map literal
+      osgi_compendium: "org.osgi:org.osgi.compendium:5.0.0"
+]
 
-dependencies {
-	compile 'org.osgi:org.osgi.compendium:5.0.0'
-}
+
+
+
+
+
+

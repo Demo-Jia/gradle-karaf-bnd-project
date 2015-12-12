@@ -2,9 +2,11 @@
 .classpath
 .settings
 .metadata
+.gradle
 
 out/
-
+build/
+bin/
 
 *.class
 
