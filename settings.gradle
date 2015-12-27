@@ -1,1 +1,1 @@
-include 'greeting-api', 'greeting-impl'
+include 'greeting-api', 'greeting-impl', 'greeting-features'

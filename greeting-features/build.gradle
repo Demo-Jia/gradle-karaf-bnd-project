@@ -1,0 +1,20 @@
+import org.apache.tools.ant.filters.*
+
+processResources{
+  filter ReplaceTokens, tokens : [
+    "project.version" : version
+  ]
+
+}
+
+publishing {
+  publications {
+    feature(MavenPublication) {
+      artifactId 'greeting'
+      artifact(file('build/resources/main/features.xml')) {
+        classifier 'features'
+        extension 'xml'
+      }
+    }
+  }
+}
