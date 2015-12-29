@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="net.sf.greeting-@project.version@" xmlns="http://karaf.apache.org/xmlns/features/v1.0.0">
+
+    <feature name="greeting" description="Greeting karaf feature" version="@project.version@" resolver="(obr)">
+       <bundle>mvn:net.sf.greeting/greeting-api/@project.version@</bundle>
+       <bundle>mvn:net.sf.greeting/greeting-impl/@project.version@</bundle> 
+    </feature>
+
+</features>

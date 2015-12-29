@@ -1,3 +1,6 @@
+apply plugin: 'base'
+apply plugin: 'maven-publish'
+
 buildscript {
   repositories {
     jcenter()
@@ -18,9 +21,6 @@ subprojects {
     }
   
     sourceCompatibility = 1.8
-    group = 'net.sf.greeting'
-    version = '1.0.0-SNAPSHOT' + buildNumber
-   
     
     dependencies {
         testCompile 'junit:junit:4.12'
@@ -51,11 +51,46 @@ subprojects {
 	            artifact javadocJar {
                    classifier "javadoc"
                 }
-             }
+            }
         }
     }
-  
 }
+
+
+//for Ant filter
+import org.apache.tools.ant.filters.ReplaceTokens
+
+task filterFeatures(type: Copy) {
+     from('karaf-features') {
+         include '**/*.xml'
+         filter(ReplaceTokens, tokens : [
+   			      "project.version" : version
+  		        ])
+     }
+     into 'build/karaf-features'
+}
+build.dependsOn filterFeatures
+
+task showVersion << {
+	println ("Project version = $version")
+}
+
+build.dependsOn showVersion
+
+publishing {
+    publications {
+        feature(MavenPublication) {
+            artifactId 'greeting'
+            artifact(file('build/karaf-features/greeting-features.xml')) {
+                classifier 'features'
+                extension 'xml'
+            }
+        }
+    }
+}
+
+publishToMavenLocal.dependsOn build
+
 // See http://stackoverflow.com/questions/9547170/in-gradle-how-do-i-declare-common-dependencies-in-a-single-place
 
 ext.libraries = [ // Groovy map literal
