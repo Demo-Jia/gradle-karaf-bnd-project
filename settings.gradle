@@ -1,2 +1,3 @@
 include 'greeting-api'
 include 'greeting-impl'
+include 'greeting-features'

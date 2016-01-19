@@ -8,11 +8,13 @@ buildscript {
   dependencies {
     classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.0.0'
   }
-
 }
 
-subprojects {
-    apply plugin: 'java'
+def bundleProjects() { 
+  return subprojects.findAll { new File(it.projectDir, "bnd.bnd").exists() }
+} 
+
+configure(bundleProjects()) {       
     apply plugin: 'biz.aQute.bnd.builder'
     apply plugin: 'maven-publish'
  
@@ -56,38 +58,16 @@ subprojects {
     }
 }
 
-
-//for Ant filter
-import org.apache.tools.ant.filters.ReplaceTokens
-
-task filterFeatures(type: Copy) {
-     from('karaf-features') {
-         include '**/*.xml'
-         filter(ReplaceTokens, tokens : [
-   			      "project.version" : version
-  		        ])
-     }
-     into 'build/karaf-features'
+project(':greeting-features') {
+    apply plugin: 'base'
+	apply plugin: 'maven-publish'
 }
-build.dependsOn filterFeatures
 
 task showVersion << {
 	println ("Project version = $version")
 }
 
 build.dependsOn showVersion
-
-publishing {
-    publications {
-        feature(MavenPublication) {
-            artifactId 'greeting'
-            artifact(file('build/karaf-features/greeting-features.xml')) {
-                classifier 'features'
-                extension 'xml'
-            }
-        }
-    }
-}
 
 publishToMavenLocal.dependsOn build
 

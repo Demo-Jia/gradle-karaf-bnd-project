@@ -1,17 +1,22 @@
-import org.apache.tools.ant.filters.*
+//for Ant filter
+import org.apache.tools.ant.filters.ReplaceTokens
 
-processResources{
-  filter ReplaceTokens, tokens : [
-    "project.version" : version
-  ]
-
+task filterFeatures(type: Copy) {
+     from('src/main/resources') {
+         include '**/*.xml'
+         filter(ReplaceTokens, tokens : [
+   			      "project.version" : version
+  		        ])
+     }
+     into 'build'
 }
+build.dependsOn filterFeatures
 
 publishing {
   publications {
     feature(MavenPublication) {
       artifactId 'greeting'
-      artifact(file('build/resources/main/features.xml')) {
+      artifact(file('build/features.xml')) {
         classifier 'features'
         extension 'xml'
       }
