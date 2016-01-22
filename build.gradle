@@ -3,7 +3,9 @@ apply plugin: 'maven-publish'
 
 buildscript {
   repositories {
-    jcenter()
+     mavenCentral()
+     mavenLocal()
+     jcenter()
   }
   dependencies {
     classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.0.0'
@@ -19,7 +21,8 @@ configure(bundleProjects()) {
     apply plugin: 'maven-publish'
  
     repositories {
-        mavenCentral()
+       mavenCentral()
+       mavenLocal()
     }
   
     sourceCompatibility = 1.8
@@ -42,6 +45,8 @@ configure(bundleProjects()) {
         from sourceSets.main.allJava
     }
 
+    task install(type: Task, dependsOn: publishToMavenLocal)
+
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -53,6 +58,37 @@ configure(bundleProjects()) {
 	            artifact javadocJar {
                    classifier "javadoc"
                 }
+                
+                pom.withXml {
+       				/*
+	                  asNode().children().first().parent()
+	                      .appendNode('repositories')
+	                        .appendNode('repository')
+	                          .appendNode('id', 'central').parent()
+	                          .appendNode('url', ' http://repo1.maven.org/maven2/')
+	                */
+	                
+       				asNode().children().first() + {
+       					
+       					// See https://discuss.gradle.org/t/some-elements-are-removed-when-generate-a-pom-xml-using-the-maven-publish-plugin/2073/2
+       					resolveStrategy = Closure.DELEGATE_FIRST
+       					
+						name project.name
+						description 'Sample bnd gradle integration'
+						url 'https://github.com/antoniomaria/gradle-bnd-project'
+						developers {
+                	        developer {
+            	                id 'antoniomaria'
+        	                    name 'Antonio Maria Sanchez Berrocal'
+    	                    }
+	                    }
+					}
+       				// TEMPORARY : currently Gradle Publishing feature is exporting dependencies as 'runtime' scope,
+	                //      rather than 'compile'; fix that.
+    	            asNode().dependencies[0].dependency.each {
+        	            it.scope[0].value = 'compile'
+            	    }
+      			}
             }
         }
     }
@@ -69,15 +105,12 @@ task showVersion << {
 
 build.dependsOn showVersion
 
-publishToMavenLocal.dependsOn build
+// publishToMavenLocal.dependsOn build
 
 // See http://stackoverflow.com/questions/9547170/in-gradle-how-do-i-declare-common-dependencies-in-a-single-place
 
 ext.libraries = [ // Groovy map literal
       osgi_compendium: "org.osgi:org.osgi.compendium:5.0.0"
 ]
-
-
-
 
 
