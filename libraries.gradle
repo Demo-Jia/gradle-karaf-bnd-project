@@ -1,0 +1,13 @@
+// build a map of the dependency artifacts to use.  Allows centralized definition of the version of artifacts to
+// use.  In that respect it serves a role similar to <dependencyManagement> in Maven
+ext {
+
+    junitVersion = '4.11'
+
+    libraries = [
+		osgi_compendium: "org.osgi:org.osgi.compendium:5.0.0",
+		junit: "junit:junit:${junitVersion}",
+		bnd: "biz.aQute.bnd:biz.aQute.bnd:3.1.0"
+	]
+}
+     

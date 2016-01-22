@@ -1,5 +1,6 @@
 apply plugin: 'base'
 apply plugin: 'maven-publish'
+apply from: "./libraries.gradle"
 
 buildscript {
   repositories {
@@ -28,8 +29,8 @@ configure(bundleProjects()) {
     sourceCompatibility = 1.8
     
     dependencies {
-        testCompile 'junit:junit:4.12'
-        compile 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.0.0'
+        testCompile( libraries.junit )
+        compile (libraries.bnd )
     }
     
     
@@ -106,11 +107,4 @@ task showVersion << {
 build.dependsOn showVersion
 
 // publishToMavenLocal.dependsOn build
-
-// See http://stackoverflow.com/questions/9547170/in-gradle-how-do-i-declare-common-dependencies-in-a-single-place
-
-ext.libraries = [ // Groovy map literal
-      osgi_compendium: "org.osgi:org.osgi.compendium:5.0.0"
-]
-
 
