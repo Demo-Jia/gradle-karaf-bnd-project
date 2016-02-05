@@ -3,6 +3,17 @@
 ext {
 
     junitVersion = '4.11'
+    
+    
+	// Osgi related
+	karafVersion = '4.0.4'
+
+	paxLoggingVersion = '1.8.1'
+	paxWebVersion = '2.1.2'
+	paxLogbackVersion = '1.8.4'
+
+	// Third parties
+	logbackVersion =  '1.1.2'
 
     libraries = [
 		osgi_compendium: "org.osgi:org.osgi.compendium:5.0.0",

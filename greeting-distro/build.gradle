@@ -1,0 +1,83 @@
+apply plugin: 'base'
+
+configurations {
+    runtime
+	paxlogback
+}
+
+dependencies {    
+	runtime "org.apache.karaf:apache-karaf:$karafVersion@zip"
+	paxlogback "ch.qos.logback:logback-core:$logbackVersion@jar"
+	paxlogback "org.ops4j.pax.logging:pax-logging-logback:$paxLogbackVersion@jar"
+	
+}
+
+task downloadKaraf << {
+    // Download fresh karaf distribution
+    copy {
+        from configurations.runtime
+        into "build/dependencies"
+    }
+	// Unzip fresh karaf
+	copy{
+		from zipTree(file("${buildDir}/dependencies/apache-karaf-${karafVersion}.zip"))
+		into file("${buildDir}/dependencies")
+	}
+	copy {
+		from "${buildDir}/dependencies/apache-karaf-$karafVersion"
+		into "${buildDir}/assembly"
+	}
+}	
+
+
+task addLogbackSupport(dependsOn: 'downloadKaraf') << {
+	copy{
+		from ("${buildDir}/dependencies/apache-karaf-${karafVersion}/etc"){
+			include "startup.properties"
+			filter { line -> line.contains('pax-logging-service') ? "mvn\\:org.ops4j.pax.logging/pax-logging-logback/${paxLogbackVersion} = 8\nmvn\\:ch.qos.logback/logback-core/${logbackVersion} = 8" : line }
+			}
+		into "${buildDir}/assembly/etc"
+	}
+	
+	copy{
+		from ("src/main/resources/etc"){
+			include "logback.xml"
+			include "logback-included.xml"
+			include "org.ops4j.pax.logging.cfg"
+			}
+		into "${buildDir}/assembly/etc"
+	}
+	
+	copy{
+		def fileRenameMap = [:];
+		from configurations.paxlogback.resolvedConfiguration.resolvedArtifacts.collect { 
+		dependency ->
+			def groupAsPath = dependency.moduleVersion.id.group.replace('.' as char, File.separatorChar)
+			def version = dependency.moduleVersion.id.version
+			def newFileName = "${groupAsPath}/${dependency.name}/${version}/${dependency.name}-${version}.${dependency.type}"
+			fileRenameMap[dependency.file.name] = newFileName
+			dependency.file
+		}
+		rename { oldName -> fileRenameMap[oldName] }
+		into("${buildDir}/assembly/system")	
+	}
+}
+
+
+//for Ant filter
+import org.apache.tools.ant.filters.ReplaceTokens
+
+task filterFeatures(type: Copy) {
+     from('src/main/resources/etc') {
+         include 'org.apache.karaf.features.cfg'
+         filter(ReplaceTokens, tokens : [
+   			      "version" : project.version,
+   			       "karafVersion" : karafVersion
+  		        ])
+  		        
+     }
+     into "${buildDir}/assembly/etc"
+}
+
+build.dependsOn addLogbackSupport
+build.dependsOn filterFeatures
