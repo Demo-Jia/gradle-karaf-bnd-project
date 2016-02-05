@@ -95,9 +95,19 @@ configure(bundleProjects()) {
     }
 }
 
-project(':greeting-features') {
-    apply plugin: 'base'
+
+def nonJavaProjects(){
+ return subprojects - bundleProjects();
+}
+
+configure(nonJavaProjects()){
+  	apply plugin: 'base'
 	apply plugin: 'maven-publish'
+	
+	repositories {
+		mavenCentral()
+		mavenLocal()
+	}
 }
 
 task showVersion << {

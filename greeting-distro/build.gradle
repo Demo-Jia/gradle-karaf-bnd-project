@@ -1,0 +1,27 @@
+apply plugin: 'base'
+
+configurations {
+    runtime
+}
+dependencies {    
+	runtime 'org.apache.karaf:apache-karaf:4.0.4@zip'
+}
+
+task downloadKaraf << {
+    // Download fresh karaf distribution
+    copy {
+        from configurations.runtime
+        into "build/dependencies"
+    }
+	// Unzip fresh karaf
+	copy{
+		from zipTree(file("${buildDir}/dependencies/apache-karaf-4.0.4.zip"))
+		into file("${buildDir}/assembly")
+		include "apache-karaf-4.0.4/**"		
+	}
+}	
+
+  
+task listJars << {
+    configurations.runtime.each { File file -> println file.name }
+}
