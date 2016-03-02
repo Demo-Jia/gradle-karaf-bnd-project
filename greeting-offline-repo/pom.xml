@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>net.sf.greeting</groupId>
+  <artifactId>offline-repository</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <karaf.version>4.0.3</karaf.version>
+  </properties>
+
+  <build>
+    <outputDirectory>build</outputDirectory>
+    <directory>build</directory>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.karaf.tooling</groupId>
+        <artifactId>karaf-maven-plugin</artifactId>
+        <version>${karaf.version}</version>
+         <extensions>true</extensions>
+        <executions>
+          <execution>
+            <id>features-add-to-repo</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>features-add-to-repository</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>mvn:net.sf.greeting/greeting-features/1.0.0-SNAPSHOT/xml/features</descriptor>
+              </descriptors>
+              <features>
+                <feature>greeting</feature>
+              </features>
+              <repository>build/offline-repo</repository>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+
+  </build>
+</project>

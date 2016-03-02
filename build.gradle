@@ -12,7 +12,9 @@ buildscript {
     classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.0.0'
   }
 }
-
+allprojects{
+	group 'net.sf.greeting'
+}
 def bundleProjects() { 
   return subprojects.findAll { new File(it.projectDir, "bnd.bnd").exists() }
 } 
@@ -108,6 +110,8 @@ configure(nonJavaProjects()){
 		mavenCentral()
 		mavenLocal()
 	}
+	
+    task install(type: Task, dependsOn: publishToMavenLocal)
 }
 
 task showVersion << {

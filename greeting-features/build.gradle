@@ -12,13 +12,17 @@ task filterFeatures(type: Copy) {
 }
 build.dependsOn filterFeatures
 
+publishToMavenLocal.dependsOn build
+
 publishing {
   publications {
     feature(MavenPublication) {
-      artifactId 'greeting'
       artifact(file('build/features.xml')) {
         classifier 'features'
         extension 'xml'
+      }
+      pom{
+      	packaging 'feature'
       }
     }
   }
