@@ -1,0 +1,4 @@
+task createKar(type: Exec) {
+	 //on windows:
+  	commandLine 'cmd', '/c', 'mvn', 'generate-resources'
+}
