@@ -1,6 +1,5 @@
 -dsannotations: *
 Service-Component: *
 
-Bundle-Name: Greeting API  created at ${tstamp}
-Bundle-SymbolicName: net.sf.greetingapi
-Export-Package: net.sf.greetingapi
+Bundle-Name: Greeting API Impl created at ${tstamp}
+Bundle-SymbolicName: net.sf.greeting.impl

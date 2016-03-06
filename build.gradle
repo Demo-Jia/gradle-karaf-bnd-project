@@ -20,6 +20,7 @@ def bundleProjects() {
 configure(bundleProjects()) {       
     apply plugin: 'biz.aQute.bnd.builder'
     apply plugin: 'maven-publish'
+    apply plugin: 'eclipse'
  
     repositories {
        mavenCentral()
@@ -31,6 +32,7 @@ configure(bundleProjects()) {
     dependencies {
         testCompile( libraries.junit )
         compile (libraries.bnd )
+        compile (libraries.osgi_compendium )
     }
     
     

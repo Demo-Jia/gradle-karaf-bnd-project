@@ -16,9 +16,9 @@ ext {
 	logbackVersion =  '1.1.2'
 
     libraries = [
-		osgi_compendium: "org.osgi:org.osgi.compendium:5.0.0",
+		osgi_compendium: "org.osgi:osgi.cmpn:6.0.0",
 		junit: "junit:junit:${junitVersion}",
-		bnd: "biz.aQute.bnd:biz.aQute.bnd:3.1.0"
+		bnd: "biz.aQute.bnd:biz.aQute.bnd:3.0.0"
 	]
 }
      

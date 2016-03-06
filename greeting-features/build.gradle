@@ -14,6 +14,8 @@ build.dependsOn filterFeatures
 
 publishToMavenLocal.dependsOn build
 
+task install(type: Task, dependsOn: publishToMavenLocal)
+
 publishing {
   publications {
     feature(MavenPublication) {
