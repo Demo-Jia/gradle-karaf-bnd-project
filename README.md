@@ -22,7 +22,17 @@ After that check a karaf distribution with logback ready to run greeting-api and
 
     ~/git/gradle-bnd-project/greeting-distro/build/assembly
 
- Type to start karaf
+ Type to start karaf:
     
      ~/git/gradle-bnd-project/greeting-distro/build/assembly/bin/karaf
+     
+     karaf@root()> feature:install greeting
+     
+     START LEVEL 100 , List Threshold: 50
+     ID | State  | Lvl | Version        | Name
+     ------------------------------------------------------------------------------
+     53 | Active |  80 | 1.0.0.SNAPSHOT | Greeting API  created at 201604261743
+     54 | Active |  80 | 1.0.0.SNAPSHOT | Greeting API Impl created at 201604261743
+     
+ 
  
